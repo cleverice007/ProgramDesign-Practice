@@ -3,6 +3,16 @@
         "iostream": "cpp",
         "ostream": "cpp",
         "__bit_reference": "cpp",
-        "cstdlib": "cpp"
+        "cstdlib": "cpp",
+        "array": "cpp",
+        "bitset": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "unordered_map": "cpp",
+        "variant": "cpp",
+        "vector": "cpp",
+        "functional": "cpp",
+        "chrono": "cpp",
+        "istream": "cpp"
     }
 }
