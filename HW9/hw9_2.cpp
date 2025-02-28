@@ -70,3 +70,60 @@ typedef struct vector2D{
 
 
 } vector2D; 
+
+
+// define matrix class
+
+class Matrix {
+private:
+    vector2D size;
+    double **data;
+    bool isNull;
+
+public:
+    // constructor & destructor
+    Matrix();
+    Matrix(vector2D size);
+    Matrix(const Matrix &m);
+    ~Matrix();
+}; 
+
+// constructor
+Matrix::Matrix() : size(0,0)
+{
+    this->isNull = true;
+    this->data = nullptr;
+}
+
+Matrix::Matrix(vector2D size) : size(size),isNull(false)
+{
+    this->data = new double*[size.row];
+    for(int i=0;i<size.row;i++){
+        this->data[i] = new double[size.col];
+    }
+}
+
+Matrix::Matrix(const Matrix &m) : size(m.size),isNull(m.isNull)
+{
+    this->data = new double*[size.row];
+    for(int i=0;i<size.row;i++){
+        this->data[i] = new double[size.col];
+    }
+    for(int i=0;i<size.row;i++){
+        for(int j=0;j<size.col;j++){
+            this->data[i][j] = m.data[i][j];
+        }
+    }
+}
+
+// destructor
+
+Matrix::~Matrix()
+{
+    if(this->isNull == false){
+        for(int i=0;i<this->size.row;i++){
+            delete[] this->data[i];
+        }
+        delete[] this->data;
+    }
+}
