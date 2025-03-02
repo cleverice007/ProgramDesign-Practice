@@ -86,6 +86,12 @@ public:
     Matrix(vector2D size);
     Matrix(const Matrix &m);
     ~Matrix();
+
+
+    // Operators
+    friend ostream &operator<<(ostream &os, const Matrix &mat);
+    friend istream &operator>>(istream &is, Matrix &mat);
+  
 }; 
 
 // constructor
@@ -127,3 +133,45 @@ Matrix::~Matrix()
         delete[] this->data;
     }
 }
+
+// Matrix assignment operator
+
+Matrix &Matrix::operator=(const Matrix &m)
+{
+    this -> isNull = m.isNull;
+    if(this -> isNull == false){
+        for(int i=0;i<this->size.row;i++){
+            delete[] this->data[i];
+        }
+        delete[] this->data;
+    }
+
+    this -> size = m.size;
+
+    for(int i =0;i<this->size.row;i++){
+        this->data[i] = new double[this->size.col];
+    }
+
+    for(int i=0;i<this->size.row;i++){
+        for(int j=0;j<this->size.col;j++){
+            this->data[i][j] = m.data[i][j];
+        }
+    }
+
+    return *this;
+}
+
+// cout operator
+
+ostream &operator<<(ostream &os, const Matrix &m)
+{
+    for(int i = 0; i < m.size.row; i++){
+        for(int j = 0; j < m.size.col; j++){
+          j == 0 ? os << m.data[i][j] : os << " " << m.data[i][j];
+        }
+        os << endl;  
+    }
+    return os;  
+}
+
+

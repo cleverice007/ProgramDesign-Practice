@@ -13,6 +13,7 @@
         "vector": "cpp",
         "functional": "cpp",
         "chrono": "cpp",
-        "istream": "cpp"
+        "istream": "cpp",
+        "new": "cpp"
     }
 }
