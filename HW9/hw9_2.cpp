@@ -91,8 +91,33 @@ public:
     // Operators
     friend ostream &operator<<(ostream &os, const Matrix &mat);
     friend istream &operator>>(istream &is, Matrix &mat);
+    Matrix operator+(const Matrix &other) const; // addition
+
   
+
+    // getter and setter
+
+    double getElement(const vector2D &index) const {
+        if (index.row < 0 || index.row >= size.row ||
+            index.col < 0 || index.col >= size.col) {
+            throw std::out_of_range("Index out of range in getElement()");
+        }
+        return data[index.row][index.col];
+    }
+
+    void setElement(const vector2D &index, double val) {
+        if (index.row < 0 || index.row >= size.row ||
+            index.col < 0 || index.col >= size.col) {
+            throw std::out_of_range("Index out of range in setElement()");
+        }
+        data[index.row][index.col] = val;
+    }
 }; 
+
+
+
+
+
 
 // constructor
 Matrix::Matrix() : size(0,0)
@@ -174,4 +199,36 @@ ostream &operator<<(ostream &os, const Matrix &m)
     return os;  
 }
 
+// cin operator
 
+istream &operator>>(istream &is, Matrix &m)
+{
+    for(int i =0;i<m.size.row;i++){
+        for(int j=0;j<m.size.col;j++){
+            is >> m.data[i][j];
+        }
+    }
+    return is;
+}
+
+
+// addition operator
+
+Matrix Matrix::operator+(const Matrix &m) const
+{
+    if (this->size != m.size) {
+        throw std::invalid_argument("Matrix size mismatch");
+    }
+
+    Matrix result(this->size);
+
+    for (int i = 0; i < size.row; i++) {
+        for (int j = 0; j < size.col; j++) {
+            vector2D idx(i, j); 
+            double sumVal = this->getElement(idx) + m.getElement(idx);
+            result.setElement(idx, sumVal);
+        }
+    }
+
+    return result;
+}
