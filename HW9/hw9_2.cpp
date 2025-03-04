@@ -92,7 +92,9 @@ public:
     friend ostream &operator<<(ostream &os, const Matrix &mat);
     friend istream &operator>>(istream &is, Matrix &mat);
     Matrix operator+(const Matrix &other) const; // addition
-
+    Matrix operator -() const; // negative
+    Matrix operator*(const Matrix &mat) const; // matrix multiplication
+    Matrix operator*(const int &scalar) const;   // scalar multiplication
   
 
     // getter and setter
@@ -230,5 +232,57 @@ Matrix Matrix::operator+(const Matrix &m) const
         }
     }
 
+    return result;
+}
+
+// negative operator
+
+Matrix Matrix::operator -() const{
+    Matrix result(this->size);
+
+    for(int i =0; i<this->size.row;i++){
+        for(int j=0; i<this->size.col;j++){
+            vector2D idx(i,j);
+            double negVal = -this->getElement(idx);
+            result.setElement(idx,negVal);  
+        }
+    }
+
+    return result;
+}
+
+// matrix multiplication operator
+
+Matrix Matrix::operator*(const Matrix &mat) const{
+    if(this->size.col != mat.size.row){
+        throw std::invalid_argument("Matrix size mismatch");
+    }
+    Matrix result(vector2D(this->size.row,mat.size.col));
+
+    for(int i=0;i<this->size.row;i++){
+        for(int j=0;j<mat.size.col;j++){
+           double sum = 0;
+           for(int k=0;k<this->size.col;k++){
+               sum += this->data[i][k] * mat.data[k][j];
+           }
+           vector2D idx(i,j);
+           result.setElement(idx,sum);
+        }
+    }
+    return result;
+}
+
+// scalar multiplication
+
+Matrix Matrix::operator*(const int &scalar) const{
+    Matrix result(this->size);
+
+    for(int i=0;i<this->size.row;i++){
+        for(int j=0;j<this->size.col;j++){
+            vector2D idx(i,j);
+            double mulVal = this->getElement(idx) * scalar;
+            result.setElement(idx,mulVal);
+        }
+    }
     return result;
 }
