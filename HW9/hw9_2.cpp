@@ -286,3 +286,82 @@ Matrix Matrix::operator*(const int &scalar) const{
     }
     return result;
 }
+
+
+class Problem
+{
+private:
+    string transformation;
+    string vectorIdent;
+
+    Matrix matrices[30];
+    string matricesIdent[30];
+    int matricesCount;
+
+    void addMatrixDefinition(string ident, Matrix mat);
+    Matrix getMatrixByIdent(string ident);
+    Matrix evaluateExpression(string exp);
+    Matrix evaluateTerm(string term);
+
+public:
+    // Constructor / Destructor
+    Problem() : matricesCount(0){};
+    ~Problem(){};
+
+    void solve();
+};
+
+// member functions
+
+// store the matrix and their name into array
+// connect them with same index
+void Problem::addMatrixDefinition(string ident, Matrix mat)
+{
+  this->matrices[this->matricesCount] = mat;
+  this->matricesIdent[this->matricesCount] = ident;
+  this->matricesCount++;
+}
+
+// get the matrix by their name
+
+Matrix Problem::getMatrixByIdent(string ident)
+{
+  for(int i =0;i<this->matricesCount;i++){
+     if(this->matricesIdent[i] == ident){
+         return this->matrices[i];
+     }
+  }
+    throw std::invalid_argument("Matrix not found");
+}
+
+
+// three cases: 1. matrix 2. scalar * matrix 3.matrix * matrix
+
+Matrix Problem::evaluateTerm(string term)
+{
+    // 1. matrix
+    if (term.size() == 1) {
+        return getMatrixByIdent(term);
+    }
+
+    int matIndex = findAlphabet(term);
+
+    if (matIndex == std::string::npos) {
+        throw std::invalid_argument("Invalid term: " + term);
+    }
+
+    // 2. scalar * matrix
+    if (matIndex != 0) {
+        int scalar = stoi(term.substr(0, matIndex));
+        Matrix rightPart = evaluateTerm(term.substr(matIndex));
+
+       
+        return rightPart * scalar;
+    }
+
+    // 3. matrix * matrix
+
+    Matrix firstMat = evaluateTerm(term.substr(0, 1));
+    Matrix remainMat = evaluateTerm(term.substr(1));
+    return firstMat * remainMat;
+}
