@@ -365,3 +365,46 @@ Matrix Problem::evaluateTerm(string term)
     Matrix remainMat = evaluateTerm(term.substr(1));
     return firstMat * remainMat;
 }
+
+
+
+// separate the expression by add and subtract operator
+// then evaluate the term
+// specifailly deal with the negative sign
+
+Matrix Problem::evaluateExpression(std::string exp) {
+    if (exp.empty()) {
+        throw std::invalid_argument("Invalid expression: empty input!");
+    }
+
+    // 1. find the operator
+    int operatorIndex = findOperator(exp);
+
+    // 2.deal with the case that there is no operator
+    if (operatorIndex == -1) {
+        return evaluateTerm(exp); 
+    }
+
+
+    Matrix left;
+    if (operatorIndex == 0) {
+        // 3. deal with the negative sign
+        left = evaluateTerm(exp.substr(1)) * -1;
+    } else {
+        // 3. evaluate the left operand
+        left = evaluateTerm(exp.substr(0, operatorIndex));
+    }
+
+    // 4. evaluate the right operand
+    std::string rightExp = exp.substr(operatorIndex + 1);
+
+    // 5. deal with the trailing operator
+    if (rightExp.empty()) {
+        throw std::invalid_argument("Invalid expression: trailing operator!");
+    }
+
+    Matrix right = evaluateExpression(rightExp); 
+
+    // 6. perform the operation
+    return left + right;
+}
