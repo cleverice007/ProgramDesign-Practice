@@ -408,3 +408,48 @@ Matrix Problem::evaluateExpression(std::string exp) {
     // 6. perform the operation
     return left + right;
 }
+
+
+// read the input : matrix expression
+// store the matrix and their name
+// store the vector
+// print the answer
+
+void Problem::solve()
+{
+    string ident;
+    int m, n;
+    // read the input
+    
+     cin >> this->transformation;
+
+     do{
+        cin >> ident >> m >> n;
+        Matrix mat(vector2D(m,n));
+        cin >> mat;
+        this -> addMatrixDefinition(ident,mat);
+     }while(!isLowerCase(ident.at(0)));
+    
+    this->vectorIdent = ident;
+    try
+    {
+        Matrix transformationMatrix = evaluateExpression(this->transformation);  
+        Matrix vector = this->getMatrixByIdent(this->vectorIdent);
+        Matrix ans = transformationMatrix * vector;
+
+        std::cout << ans;
+    }
+    catch (const std::exception &e)
+    {
+        std::cout << -1 << '\n';
+    }
+
+    }
+        int main()
+{
+    Problem problem;
+
+    problem.solve();
+
+    return 0;
+}
